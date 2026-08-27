@@ -65,7 +65,7 @@ MAX_REFRESH_DELAY=60
 Run the bot with your current appointment date:
 
 ```bash
-node index.js -c <current_date> [-t <target_date>] [-m <min_date>]
+node src/index.js -c <current_date> [-t <target_date>] [-m <min_date>]
 ```
 
 ### Command Line Arguments
@@ -80,20 +80,70 @@ node index.js -c <current_date> [-t <target_date>] [-m <min_date>]
 
 ```bash
 # Basic usage - reschedule to any earlier date
-node index.js -c 2023-06-15
+node src/index.js -c 2023-06-15
 
 # With target date - stop when you get June 1st or earlier  
-node index.js -c 2023-06-15 -t 2023-06-01
+node src/index.js -c 2023-06-15 -t 2023-06-01
 
 # With minimum date - only accept dates after May 1st
-node index.js -c 2023-06-15 -m 2023-05-01
+node src/index.js -c 2023-06-15 -m 2023-05-01
 
 # With both constraints - only book between May 1st and June 1st
-node index.js -c 2023-06-15 -t 2023-06-01 -m 2023-05-01
+node src/index.js -c 2023-06-15 -t 2023-06-01 -m 2023-05-01
 
 # Get help
-node index.js --help
+node src/index.js --help
 ```
+
+## Running with Docker
+
+You can run the bot in a container instead of installing Node.js locally.
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+
+### Configuration
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+In addition to the credentials described above, `.env` supports four
+Docker-specific variables that map to the bot's command-line flags:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `CURRENT_DATE` | ✅ | Your current booked interview date (YYYY-MM-DD) - passed as `-c` |
+| `TARGET_DATE` | ❌ | Target date to stop at - passed as `-t`. Leave blank for no target |
+| `MIN_DATE` | ❌ | Minimum acceptable date - passed as `-m`. Leave blank for no minimum |
+| `DRY_RUN_FLAG` | ❌ | Set to `--dry-run` to log what would be booked without actually booking. Leave blank for real runs |
+
+### Running
+
+Start the bot in the background:
+
+```bash
+docker compose up -d --build
+```
+
+View live logs:
+
+```bash
+docker compose logs -f bot
+```
+
+Stop the bot:
+
+```bash
+docker compose down
+```
+
+Changing `CURRENT_DATE`, `TARGET_DATE`, `MIN_DATE`, or `DRY_RUN_FLAG` requires
+editing `.env` and re-running `docker compose up -d` — Compose picks up the
+new `command:` when it recreates the container.
 
 ## How It Behaves
 

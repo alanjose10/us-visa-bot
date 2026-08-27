@@ -1,7 +1,9 @@
 node_modules
 .git
 .env
+.env.*
 docs
 .claude
 .worktrees
 *.md
+**/*.test.js
