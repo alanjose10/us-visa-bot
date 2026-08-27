@@ -1,0 +1,7 @@
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    command: >
+      sh -c "node src/index.js bot -c ${CURRENT_DATE} -t \"${TARGET_DATE}\" -m \"${MIN_DATE}\" ${DRY_RUN_FLAG}"
