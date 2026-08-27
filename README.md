@@ -99,7 +99,7 @@ node index.js --help
 
 The bot will:
 1. **Log in** to your account using provided credentials
-2. **Check** for available dates every few seconds
+2. **Check** for available dates
 3. **Waits** a randomized delay between `MIN_REFRESH_DELAY` and `MAX_REFRESH_DELAY` seconds between checks (not a fixed interval), and periodically takes a longer 5-15 minute pause every 30-50 checks
 4. **Backs off** exponentially on login/session errors (starting at 30s, doubling up to a 30-minute cap) instead of retrying immediately
 5. **Compare** found dates against your constraints:
