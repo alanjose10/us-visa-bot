@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "node --test 'src/**/*.test.js'",
+    "test": "node --test src/lib/utils.test.js src/lib/config.test.js",
     "lint": "echo \"No linter configured\"",
     "dev": "node src/index.js"
   },

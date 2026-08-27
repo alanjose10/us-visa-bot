@@ -13,11 +13,11 @@ An automated bot that monitors and reschedules US visa interview appointments to
 
 ## How It Works
 
-The bot logs into your account on https://ais.usvisa-info.com/ and checks for available appointment dates every few seconds. When it finds a date earlier than your current booking (and within your specified constraints), it automatically reschedules your appointment.
+The bot logs into your account on https://ais.usvisa-info.com/ and periodically checks for available appointment dates, using a randomized delay between checks rather than a fixed interval. When it finds a date earlier than your current booking (and within your specified constraints), it automatically reschedules your appointment.
 
 ## Prerequisites
 
-- Node.js 16+ 
+- Node.js 18+ 
 - A valid US visa interview appointment
 - Access to https://ais.usvisa-info.com/
 
@@ -100,13 +100,13 @@ node index.js --help
 The bot will:
 1. **Log in** to your account using provided credentials
 2. **Check** for available dates
-3. **Waits** a randomized delay between `MIN_REFRESH_DELAY` and `MAX_REFRESH_DELAY` seconds between checks (not a fixed interval), and periodically takes a longer 5-15 minute pause every 30-50 checks
-4. **Backs off** exponentially on login/session errors (starting at 30s, doubling up to a 30-minute cap) instead of retrying immediately
-5. **Compare** found dates against your constraints:
+3. **Compare** found dates against your constraints:
    - Must be earlier than current date (`-c`)
    - Must be after minimum date (`-m`) if specified
    - Will exit successfully if target date (`-t`) is reached
-6. **Book** the appointment automatically if conditions are met
+4. **Book** the appointment automatically if conditions are met
+5. **Waits** a randomized delay between `MIN_REFRESH_DELAY` and `MAX_REFRESH_DELAY` seconds between checks (not a fixed interval), and periodically takes a longer 5-15 minute pause every 30-50 checks
+6. **Backs off** exponentially on any error during the process (starting at 30s, doubling up to a 30-minute cap) instead of retrying immediately
 7. **Continue** monitoring until target is reached or manually stopped
 
 ## Output Examples
