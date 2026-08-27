@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveRefreshDelayRange } from './config.js';
+import { resolveRefreshDelayRange, parseBlacklistDates } from './config.js';
 
 test('defaults to 20-60s when nothing is set', () => {
   assert.deepEqual(resolveRefreshDelayRange({}), { minRefreshDelay: 20, maxRefreshDelay: 60, error: null });
@@ -88,4 +88,28 @@ test('reports an error when legacy REFRESH_DELAY is zero', () => {
   const result = resolveRefreshDelayRange({ REFRESH_DELAY: '0' });
   assert.ok(result.error, 'expected an error to be reported');
   assert.match(result.error, /REFRESH_DELAY/);
+});
+
+test('parseBlacklistDates returns an empty array when unset', () => {
+  assert.deepEqual(parseBlacklistDates(undefined), []);
+});
+
+test('parseBlacklistDates returns an empty array for an empty string', () => {
+  assert.deepEqual(parseBlacklistDates(''), []);
+});
+
+test('parseBlacklistDates splits and trims a comma-separated list', () => {
+  assert.deepEqual(parseBlacklistDates('2026-09-01, 2026-09-05 ,2026-09-08'), [
+    '2026-09-01',
+    '2026-09-05',
+    '2026-09-08'
+  ]);
+});
+
+test('parseBlacklistDates drops empty entries from stray commas', () => {
+  assert.deepEqual(parseBlacklistDates('2026-09-01,,2026-09-05,'), ['2026-09-01', '2026-09-05']);
+});
+
+test('parseBlacklistDates handles a single date', () => {
+  assert.deepEqual(parseBlacklistDates('2026-09-01'), ['2026-09-01']);
 });

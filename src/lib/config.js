@@ -63,6 +63,17 @@ export function resolveRefreshDelayRange(env) {
   };
 }
 
+export function parseBlacklistDates(raw) {
+  if (!raw) {
+    return [];
+  }
+
+  return raw
+    .split(',')
+    .map(date => date.trim())
+    .filter(date => date.length > 0);
+}
+
 export function getConfig() {
   const { minRefreshDelay, maxRefreshDelay, error: refreshDelayError } = resolveRefreshDelayRange(process.env);
 
@@ -78,7 +89,8 @@ export function getConfig() {
     facilityId: process.env.FACILITY_ID,
     countryCode: process.env.COUNTRY_CODE,
     minRefreshDelay,
-    maxRefreshDelay
+    maxRefreshDelay,
+    blacklistDates: parseBlacklistDates(process.env.BLACKLIST_DATES)
   };
 
   validateConfig(config);

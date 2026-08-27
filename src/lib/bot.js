@@ -37,6 +37,11 @@ export class Bot {
         return false;
       }
 
+      if (this.config.blacklistDates.includes(date)) {
+        log(`date ${date} is blacklisted`);
+        return false;
+      }
+
       return true;
     });
 
